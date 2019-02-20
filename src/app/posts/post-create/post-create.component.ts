@@ -1,3 +1,4 @@
+import { AuthService } from './../../auth/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Post } from 'src/app/post.model';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
@@ -20,9 +21,15 @@ export class PostCreateComponent implements OnInit {
   isLoading = false;
   form: FormGroup;
   imagePreview;
-  constructor(private postService: PostsService, private snackBar: MatSnackBar, private route: ActivatedRoute) { }
+  isAuthenticated = false;
+  constructor(private postService: PostsService, private authService: AuthService,
+              private snackBar: MatSnackBar, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.isAuthenticated = this.authService.getIsAuth();
+    this.authService.getAuthStatus().subscribe((status) => {
+      this.isAuthenticated = status;
+    });
     this.form = new FormGroup({
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)]
@@ -45,7 +52,6 @@ export class PostCreateComponent implements OnInit {
         this.postService.getPost(this.postID).subscribe(postData => {
           this.post = { id: postData.id, title: postData.title, content: postData.content, imagePath: postData.imagePath};
           //
-          console.log(postData);
           this.isLoading = false;
           this.form.setValue({
             title: this.post.title,
@@ -73,13 +79,10 @@ export class PostCreateComponent implements OnInit {
   }
 
   onAddPost() {
-    console.log(this.form.invalid);
     this.isLoading = true;
     if (this.form.invalid) {
-      console.log(this.form.invalid);
       return;
     }
-    console.log('error');
     if (this.mode === 'create') {
       this.postService.addPost(this.form.value.title, this.form.value.content, this.form.value.image);
   } else {
