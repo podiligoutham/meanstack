@@ -3,9 +3,7 @@ import { Post } from '../post.model';
 import { Subject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { stringify } from '@angular/core/src/util';
 import { Router } from '@angular/router';
-import { post } from 'selenium-webdriver/http';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +23,7 @@ export class PostsService {
           content: post.content,
           id: post._id,
           imagePath: post.imagePath,
+          creator: post.creator
         };
       }), maxPosts: postData.maxPosts};
     } ) )
@@ -58,7 +57,7 @@ export class PostsService {
       postData.append('content', content);
       postData.append('image', image, title);
     } else {
-       postData = {id, title, content, imagePath: image};
+       postData = {id, title, content, imagePath: image, creator: null};
     }
     this.http.put('http://localhost:3000/api/posts/' + id , postData )
     .subscribe((res) => {
@@ -71,7 +70,8 @@ export class PostsService {
   }
 // 6869B  5116  5016
   getPost(id: string) {
-    return this.http.get<{id: string, title: string, content: string, imagePath: string}> ('http://localhost:3000/api/posts/' + id);
+    return this.http.get<{id: string, title: string, content: string, imagePath: string, creator: string}>
+     ('http://localhost:3000/api/posts/' + id);
   }
 
 }
