@@ -15,7 +15,7 @@ router.post('/signin' , (req,res,next) => {
         });
     }).catch(err => {
         res.status(500).json({
-            error:err
+            message:'Invalid authentication credentials'
         })
     })
 });
@@ -26,7 +26,7 @@ router.post('/login' , (req,res,next) => {
         if(!user){
             
             return res.status(401).json({
-                message:'Auth failed'
+                message:'Please check your email and password'
             })
         }
         fetchedUser = user
@@ -34,7 +34,7 @@ router.post('/login' , (req,res,next) => {
     }).then(result => {
         if(!result){
             return res.status(401).json({
-                message:'Auth failed'
+                message:'Please check your email and password'
             })
         }
         const token = jwt.sign({email: fetchedUser.email, userId: fetchedUser._id},
@@ -47,7 +47,7 @@ router.post('/login' , (req,res,next) => {
         })
     }).catch(err => {
         return res.status(401).json({
-            message:'Auth failed'
+            message:'Please check your email and password'
         })
     })
 })

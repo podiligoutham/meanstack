@@ -1,5 +1,6 @@
+import { Subscription } from 'rxjs';
 import { AuthService } from './../../auth/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Post } from 'src/app/post.model';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { PostsService } from '../posts.service';
@@ -12,9 +13,10 @@ import { mimeType } from './mime-type.validator';
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit, OnDestroy {
   title: string;
   content: string;
+  private authSub: Subscription;
   private mode = 'create';
   private postID: string;
   post: Post;
@@ -26,6 +28,11 @@ export class PostCreateComponent implements OnInit {
               private snackBar: MatSnackBar, private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.authSub = this.authService.getAuthStatus().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
     this.isAuthenticated = this.authService.getIsAuth();
     this.authService.getAuthStatus().subscribe((status) => {
       this.isAuthenticated = status;
@@ -93,6 +100,9 @@ export class PostCreateComponent implements OnInit {
     this.snackBar.open('posted successfully', 'Undo', {
       duration: 2000,
       });
+  }
+  ngOnDestroy() {
+    this.authSub.unsubscribe();
   }
 
 }
