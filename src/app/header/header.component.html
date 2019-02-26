@@ -8,10 +8,10 @@
                 <a mat-button  routerLink="create" routerLinkActive="mat-accent" >New Post</a>
             </li>
             <li *ngIf="!isAuthenticated">
-                <a mat-button  routerLink="login" routerLinkActive="mat-accent" >Login</a>
+                <a mat-button  routerLink="/auth/login" routerLinkActive="mat-accent" >Login</a>
             </li>
             <li *ngIf="!isAuthenticated">
-                <a mat-button  routerLink="signin" routerLinkActive="mat-accent" >Signin</a>
+                <a mat-button  routerLink="/auth/signin" routerLinkActive="mat-accent" >Signin</a>
             </li>
             <button mat-button *ngIf="isAuthenticated" (click)="logout()" >Logout</button>
             <li *ngIf="isAuthenticated"><img src="../../assets/sample2.jpg"></li>

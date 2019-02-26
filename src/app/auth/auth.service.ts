@@ -1,8 +1,11 @@
+import { environment } from './../../environments/environment';
 import { AuthData } from './uth-data.model';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+
+const BACKEND_URL = environment.apiURL + '/users';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +28,7 @@ export class AuthService {
 
   createUser(email: string, password: string) {
     const user: AuthData = {email, password};
-    this.http.post('http://localhost:3000/api/users/signin', user).subscribe(() => {
+    this.http.post(BACKEND_URL + '/signin', user).subscribe(() => {
       this.route.navigate(['/']);
     }, error => {
       this.userAuthSub.next(false);
@@ -55,7 +58,7 @@ export class AuthService {
 
   login(email: string, password: string) {
     const user: AuthData = {email, password};
-    this.http.post<{token: string, expiresIn: number, userId: string}>('http://localhost:3000/api/users/login', user)
+    this.http.post<{token: string, expiresIn: number, userId: string}>(BACKEND_URL + '/login', user)
     .subscribe(res => {
       this.token = res.token;
       if (this.token) {
@@ -81,7 +84,7 @@ export class AuthService {
     this.userAuthSub.next(false);
     clearTimeout(this.timer);
     this.clearData();
-    this.route.navigate(['/login']);
+    this.route.navigate(['/auth/login']);
   }
   getIsAuth() {
     return this.isAuthenticated;
