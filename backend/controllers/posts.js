@@ -1,6 +1,7 @@
 const Post = require('../models/post');
 
 exports.createPost = (req,res,next) => {
+    console.log("in post")
     const url = req.protocol + '://' + req.get("host");
     const post = new Post({
         title: req.body.title,
@@ -8,6 +9,7 @@ exports.createPost = (req,res,next) => {
         imagePath: url + '/images/' + req.file.filename,
         creator: req.userData.userId
     });
+    console.log(post)
     post.save().then(createdPost => {
         res.status(201).send({
             message: "sent successfully",

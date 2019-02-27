@@ -18,7 +18,8 @@ mongoose.connect("mongodb+srv://goutham:MsS8S2AmoUb07UBi@cluster0-stj3s.mongodb.
 })
 
 app.use(bodyparser.json());
-app.use("/images", express.static(path.join("images")))
+app.use("/images", express.static(path.join(__dirname,"images")))
+app.use("/", express.static(path.join(__dirname,"angular")))
 
 app.use((req,res,next) => {
     res.setHeader('Access-Control-Allow-Origin',"*");
@@ -29,5 +30,8 @@ app.use((req,res,next) => {
 // 4VCV8ygQBodwsU9p    MsS8S2AmoUb07UBi
 app.use("/api/posts", postRoutes)
 app.use("/api/users", userRoutes)
+app.use((req,res, next) => {
+    res.sendFile(path.join(__dirname,"angular","index.html"))
+} )
 
 module.exports = app;

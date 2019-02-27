@@ -3,7 +3,9 @@ const debug = require("debug")("node-angular");
 const http = require("http");
 
 const normalizePort = val => {
+  console.log(val)
   var port = parseInt(val, 10);
+  console.log("hello port" + port)
 
   if (isNaN(port)) {
     // named pipe
@@ -18,7 +20,9 @@ const normalizePort = val => {
   return false;
 };
 
+
 const onError = error => {
+  console.log("error.syscall")
   if (error.syscall !== "listen") {
     throw error;
   }
@@ -36,11 +40,13 @@ const onError = error => {
       throw error;
   }
 };
-
+console.log("getting address")
 const onListening = () => {
   const addr = server.address();
+  console.log(addr)
   const bind = typeof port === "string" ? "pipe " + port : "port " + port;
   debug("Listening on " + bind);
+  console.log("Listening on " + bind)
 };
 
 const port = normalizePort(process.env.PORT || "3000");
